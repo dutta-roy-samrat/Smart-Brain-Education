@@ -1,0 +1,7 @@
+.homePageContainer {
+  @apply flex h-full flex-col items-center justify-center bg-yellow-400 font-bold uppercase;
+}
+
+.signUpBtn {
+  @apply bg-black text-white p-3 px-5 rounded-lg mt-4;
+}
