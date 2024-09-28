@@ -1,0 +1,19 @@
+.fieldContainerClass {
+  @apply grid grid-cols-4 items-center gap-4;
+}
+
+.labelClass {
+  @apply text-right leading-5;
+}
+
+.inputClass {
+  @apply col-span-3;
+}
+
+/* .footerClass{
+  @apply flex flex-col sm:items-center sm:justify-center
+} */
+
+.signUpBtnClass{
+  @apply rounded-xl bg-black p-2 px-4 text-white hover:bg-slate-600
+}

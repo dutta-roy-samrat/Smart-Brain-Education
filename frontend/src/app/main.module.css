@@ -1,5 +1,9 @@
 .homePageContainer {
-  @apply flex h-full flex-col items-center justify-center bg-yellow-400 font-bold uppercase;
+  @apply flex h-full flex-col items-center justify-center bg-yellow-400;
+}
+
+.landingText{
+  @apply font-bold uppercase text-xl
 }
 
 .signUpBtn {
