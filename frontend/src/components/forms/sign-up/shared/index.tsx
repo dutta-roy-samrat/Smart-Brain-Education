@@ -7,8 +7,10 @@ import { Label } from "@components/ui/label";
 import ProfileImagePlaceholderImg from "@assets/images/abstract-user-flat-4.svg";
 
 import styles from "./main.module.css";
+import { useState } from "react";
 
 const SharedSignUpForm = ({ renderFields, setStep }) => {
+  const [formFieldData,setFormFieldData]=useState(()=>[...DEFAULT_FORM_DATA])
   const handleSubmit = (e) => {
     return "";
   };
@@ -17,32 +19,27 @@ const SharedSignUpForm = ({ renderFields, setStep }) => {
   };
   return (
     <>
-      <div className="grid gap-4 py-4">
+      <div className={styles.formContainer}>
         <Image
           src={ProfileImagePlaceholderImg}
           alt="profile image placeholder"
           width={250}
           height={250}
-          className="cols-4 m-auto"
+          className={styles.profileImg}
         />
         <div className={styles.fieldContainerClass}>
-          <div className="text-right text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-            Profile Image
-          </div>
-          <div className="col-span-3 text-center text-xs">
-            <Label
-              htmlFor="profile_image"
-              className="rounded-md border-2 border-black px-2"
-            >
+          <div className={styles.profileImgLabelClass}>Profile Image</div>
+          <div className={styles.profileImgInputContainer}>
+            <Label htmlFor="profile_image" className={styles.chooseImgBtn}>
               Choose Image
             </Label>
             <Input
               type="file"
               id="profile_image"
-              className="hidden"
+              className={styles.profileImgActualInputBtn}
               accept="image/*"
             />
-            <span className="ml-2">No File Chosen</span>
+            <span className={styles.fileSelected}>No File Chosen</span>
           </div>
         </div>
         <div className={styles.fieldContainerClass}>
