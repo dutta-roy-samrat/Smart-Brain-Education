@@ -7,11 +7,11 @@
 }
 
 .profileImgLabelClass {
-  @apply text-right text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70;
+  @apply w-[150px] text-left text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70;
 }
 
 .profileImgInputContainer {
-  @apply col-span-3 text-center text-xs;
+  @apply col-start-3 col-end-5 text-center text-xs;
 }
 
 .chooseImgBtn {
@@ -23,7 +23,7 @@
 }
 
 .labelClass {
-  @apply text-right leading-5;
+  @apply text-left leading-5;
 }
 
 .inputClass {

@@ -3,18 +3,28 @@ import Image from "next/image";
 import { DialogFooter } from "@components/ui/dialog";
 import { Input } from "@components/ui/input";
 import { Label } from "@components/ui/label";
+import { DevTool } from "@hookform/devtools";
 
 import ProfileImagePlaceholderImg from "@assets/images/abstract-user-flat-4.svg";
 
 import styles from "./main.module.css";
-import { useState } from "react";
+import { ReactNode } from "react";
+import { useForm } from "react-hook-form";
 
 const SharedSignUpForm = ({ renderFields, setStep }) => {
-  const [formFieldData,setFormFieldData]=useState(()=>[...DEFAULT_FORM_DATA])
-  const handleSubmit = (e) => {
-    return "";
-  };
-  const handleProfileImageUplaod = (e) => {
+  const form = useForm();
+  const {
+    register,
+    formState,
+    getValues,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = form;
+  const { isSubmitting } = formState;
+
+  console.log(isSubmitting, "kkl");
+  const onSubmit = (e) => {
     return "";
   };
   return (
@@ -35,9 +45,10 @@ const SharedSignUpForm = ({ renderFields, setStep }) => {
             </Label>
             <Input
               type="file"
-              id="profile_image"
+              id="profileImage"
               className={styles.profileImgActualInputBtn}
               accept="image/*"
+              {...register("profileImage")}
             />
             <span className={styles.fileSelected}>No File Chosen</span>
           </div>
@@ -46,25 +57,73 @@ const SharedSignUpForm = ({ renderFields, setStep }) => {
           <Label htmlFor="first_name" className={styles.labelClass}>
             First Name
           </Label>
-          <Input type="text" id="first_name" className={styles.inputClass} />
+          <Input
+            type="text"
+            id="first_name"
+            className={styles.inputClass}
+            {...register("firstName", {
+              required: {
+                value: true,
+                message: "First Name is a required field !",
+              },
+            })}
+          />
+          {errors.firstName && <p>{errors.firstName?.message as ReactNode}</p>}
         </div>
         <div className={styles.fieldContainerClass}>
           <Label htmlFor="last_name" className={styles.labelClass}>
             Last Name
           </Label>
-          <Input type="text" id="last_name" className={styles.inputClass} />
+          <Input
+            type="text"
+            id="last_name"
+            className={styles.inputClass}
+            {...register("lastName", {
+              required: {
+                value: true,
+                message: "Last Name is a required field !",
+              },
+            })}
+          />
+          {errors.lastName && <p>{errors.lastName?.message as ReactNode}</p>}
         </div>
         <div className={styles.fieldContainerClass}>
           <Label htmlFor="email" className={styles.labelClass}>
             Email
           </Label>
-          <Input type="email" id="email" className={styles.inputClass} />
+          <Input
+            type="email"
+            id="email"
+            className={styles.inputClass}
+            {...register("email", {
+              required: {
+                value: true,
+                message: "Email is a required field !",
+              },
+              pattern: {
+                value: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2, 4}$/,
+                message: "Invalid Email !",
+              },
+            })}
+          />
+          {errors.email && <p>{errors.email?.message as ReactNode}</p>}
         </div>
         <div className={styles.fieldContainerClass}>
           <Label htmlFor="password" className={styles.labelClass}>
             Password
           </Label>
-          <Input type="password" id="password" className={styles.inputClass} />
+          <Input
+            type="password"
+            id="password"
+            className={styles.inputClass}
+            {...register("password", {
+              required: {
+                value: true,
+                message: "Password is a required field !",
+              },
+            })}
+          />
+          {errors.password && <p>{errors.password?.message as ReactNode}</p>}
         </div>
         <div className={styles.fieldContainerClass}>
           <Label htmlFor="confirm_password" className={styles.labelClass}>
@@ -74,10 +133,24 @@ const SharedSignUpForm = ({ renderFields, setStep }) => {
             type="password"
             id="confirm_password"
             className={styles.inputClass}
+            {...register("confirmPassword", {
+              required: {
+                value: true,
+                message: "Confirm your password",
+              },
+              validate: {
+                confirmPassword: (val) =>
+                  val === getValues("password") ||
+                  "Passwords Fields don't match. Please re-check!",
+              },
+            })}
           />
+          {errors.confirmPassword && (
+            <p>{errors.confirmPassword?.message as ReactNode}</p>
+          )}
         </div>
       </div>
-      {renderFields?.()}
+      {renderFields?.(form)}
       <DialogFooter className={styles.footerClass}>
         <button onClick={() => setStep?.((prevStep) => prevStep - 1)}>
           Back
@@ -85,11 +158,13 @@ const SharedSignUpForm = ({ renderFields, setStep }) => {
         <button
           type="submit"
           className={styles.signUpBtnClass}
-          onClick={handleSubmit}
+          onClick={handleSubmit(onSubmit)}
+          disabled={isSubmitting}
         >
           Sign Up
         </button>
       </DialogFooter>
+      {/* <DevTool control={control} /> */}
     </>
   );
 };

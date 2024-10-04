@@ -1,23 +1,31 @@
 .fieldContainerClass {
-    @apply grid grid-cols-4 items-center gap-4;
-  }
-  
-.gradCertFieldTitle{
-  @apply text-right text-sm font-medium leading-5 peer-disabled:cursor-not-allowed peer-disabled:opacity-70
+  @apply grid grid-cols-4 items-center gap-4;
 }
 
-.gradCertFieldContainer{
-  @apply col-span-3 text-center text-xs
+.gradCertFieldTitle {
+  @apply w-[150px] text-left text-sm font-medium leading-5 peer-disabled:cursor-not-allowed peer-disabled:opacity-70;
 }
 
-.imgChoiceBtn{
-  @apply rounded-md border-2 border-black px-2
+.gradCertFieldContainer {
+  @apply col-start-3 col-end-5 text-center text-xs;
 }
 
-.actualImgChoiceInputBtn{
-  @apply hidden
+.imgChoiceBtn {
+  @apply rounded-md border-2 border-black px-2;
 }
 
-.chosenFileName{
+.actualImgChoiceInputBtn {
+  @apply hidden;
+}
+
+.chosenFileName {
   @apply ml-2;
+}
+
+.labelClass {
+  @apply w-[150px] text-left leading-5;
+}
+
+.inputClass {
+  @apply col-start-2 col-end-5 ml-20 w-[180px];
 }
