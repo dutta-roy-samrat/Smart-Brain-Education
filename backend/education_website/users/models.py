@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser, Group
 from django.core.validators import MaxValueValidator
 from django.core.exceptions import ValidationError
 
@@ -7,24 +7,47 @@ from django.core.exceptions import ValidationError
 def validate_file_extension(value):
     if not value.name.endswith(('.png', '.jpg', '.jpeg', '.pdf')):
         raise ValidationError('Only image or PDF files are allowed.')
+def validate_image_extension(value):
+    if not value.name.endswith(('.png', '.jpg', '.jpeg',".svg")):
+        raise ValidationError('Only image or PDF files are allowed.')
 
+class CustomUser(AbstractUser):
+    groups = models.ManyToManyField(
+        Group,
+        related_name='custom_user_set',
+        blank=True,
+        help_text='The groups this user belongs to.',
+        verbose_name='groups',
+    )
 
-class Role(models.TextChoices):
-    EDUCATOR = 'edu', 'Educator'
-    STUDENT = 'std', 'Student'
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        related_name='custom_user_set',
+        blank=True,
+        help_text='Specific permissions for this user.',
+        verbose_name='user permissions',
+    )
+
+    role = models.ForeignKey(
+        Group, on_delete=models.PROTECT, null=False, related_name="users")
+    profile_image = models.ImageField(
+        upload_to="users/info", null=True, blank=True, validators=[validate_image_extension])
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
 
 
 class Subject(models.Model):
     name = models.CharField(max_length=100)
-    expert = models.ManyToManyField(User, related_name="subjects")
+    expert = models.ManyToManyField(CustomUser, related_name="subjects")
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
 
 
 class EducatorVerifications(models.Model):
     user = models.OneToOneField(
-        User, on_delete=models.CASCADE, primary_key=True, related_name="verified_educator")
+        CustomUser, on_delete=models.CASCADE, primary_key=True, related_name="verified_educator")
     id_document = models.ImageField(
         upload_to="user/documents", validators=[validate_file_extension])
     test_score = models.PositiveIntegerField(
@@ -41,7 +64,7 @@ class Questions(models.Model):
     subject = models.ForeignKey(
         Subject, related_name="questions", on_delete=models.CASCADE)
     asked_by = models.ForeignKey(
-        User, related_name="questions", on_delete=models.PROTECT)
+        CustomUser, related_name="questions", on_delete=models.PROTECT)
 
     def __str__(self):
         return f"{self.subject} - {self.pk}"
@@ -54,7 +77,7 @@ class Answers(models.Model):
     questions = models.ForeignKey(
         Questions, related_name="answers", on_delete=models.CASCADE)
     answered_by = models.ForeignKey(
-        User, related_name="answers", on_delete=models.PROTECT)
+        CustomUser, related_name="answers", on_delete=models.PROTECT)
 
     def __str__(self):
         return f"{self.questions} - {self.pk}"
