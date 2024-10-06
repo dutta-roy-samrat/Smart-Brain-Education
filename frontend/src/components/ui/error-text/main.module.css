@@ -1,0 +1,3 @@
+.errorText {
+  @apply text-red-600 text-sm;
+}

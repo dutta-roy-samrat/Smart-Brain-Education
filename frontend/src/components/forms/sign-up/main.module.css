@@ -1,0 +1,19 @@
+.formContainer {
+  @apply flex flex-col justify-center gap-5;
+}
+
+.fieldContainerClass {
+  @apply flex flex-col gap-2;
+}
+
+.labelClass {
+  @apply text-left leading-5;
+}
+
+.footerClass {
+  @apply flex flex-col sm:items-center sm:justify-center;
+}
+
+.signUpBtnClass {
+  @apply static rounded-xl bg-black p-2 px-4 text-white hover:bg-slate-600;
+}

@@ -1,0 +1,7 @@
+.fileSelected {
+  @apply ml-2;
+}
+
+.hiddenActualInput {
+  @apply hidden;
+}

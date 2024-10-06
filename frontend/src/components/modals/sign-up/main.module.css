@@ -1,5 +1,5 @@
 .dialogContent {
-  @apply h-full overflow-y-scroll sm:max-h-full md:max-h-[550px];
+  @apply h-full md:max-h-[550px] overflow-auto;
 }
 
 .dialogTriggerBtn {

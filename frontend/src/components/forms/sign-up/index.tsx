@@ -3,15 +3,23 @@ import Image from "next/image";
 import { DialogFooter } from "@components/ui/dialog";
 import { Input } from "@components/ui/input";
 import { Label } from "@components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@components/ui/select";
 import { DevTool } from "@hookform/devtools";
-
-import ProfileImagePlaceholderImg from "@assets/images/abstract-user-flat-4.svg";
 
 import styles from "./main.module.css";
 import { ReactNode } from "react";
 import { useForm } from "react-hook-form";
+import ErrorText from "@components/ui/error-text";
 
-const SharedSignUpForm = ({ renderFields, setStep }) => {
+const SignUpForm = () => {
   const form = useForm();
   const {
     register,
@@ -25,37 +33,25 @@ const SharedSignUpForm = ({ renderFields, setStep }) => {
 
   console.log(isSubmitting, "kkl");
   const onSubmit = (e) => {
+    console.log(e, "kkl");
     return "";
   };
+
+  const {
+    firstName: firstNameError,
+    lastName: lastNameError,
+    password: passWordError,
+    confirmPassword: confirmPasswordError,
+    email: emailError,
+    role: roleError,
+  } = errors;
+
   return (
     <>
       <div className={styles.formContainer}>
-        <Image
-          src={ProfileImagePlaceholderImg}
-          alt="profile image placeholder"
-          width={250}
-          height={250}
-          className={styles.profileImg}
-        />
-        <div className={styles.fieldContainerClass}>
-          <div className={styles.profileImgLabelClass}>Profile Image</div>
-          <div className={styles.profileImgInputContainer}>
-            <Label htmlFor="profile_image" className={styles.chooseImgBtn}>
-              Choose Image
-            </Label>
-            <Input
-              type="file"
-              id="profileImage"
-              className={styles.profileImgActualInputBtn}
-              accept="image/*"
-              {...register("profileImage")}
-            />
-            <span className={styles.fileSelected}>No File Chosen</span>
-          </div>
-        </div>
         <div className={styles.fieldContainerClass}>
           <Label htmlFor="first_name" className={styles.labelClass}>
-            First Name
+            First Name :
           </Label>
           <Input
             type="text"
@@ -68,11 +64,13 @@ const SharedSignUpForm = ({ renderFields, setStep }) => {
               },
             })}
           />
-          {errors.firstName && <p>{errors.firstName?.message as ReactNode}</p>}
+          {firstNameError && (
+            <ErrorText>{firstNameError?.message as ReactNode}</ErrorText>
+          )}
         </div>
         <div className={styles.fieldContainerClass}>
           <Label htmlFor="last_name" className={styles.labelClass}>
-            Last Name
+            Last Name :
           </Label>
           <Input
             type="text"
@@ -85,11 +83,13 @@ const SharedSignUpForm = ({ renderFields, setStep }) => {
               },
             })}
           />
-          {errors.lastName && <p>{errors.lastName?.message as ReactNode}</p>}
+          {lastNameError && (
+            <ErrorText>{lastNameError?.message as ReactNode}</ErrorText>
+          )}
         </div>
         <div className={styles.fieldContainerClass}>
           <Label htmlFor="email" className={styles.labelClass}>
-            Email
+            Email :
           </Label>
           <Input
             type="email"
@@ -101,16 +101,18 @@ const SharedSignUpForm = ({ renderFields, setStep }) => {
                 message: "Email is a required field !",
               },
               pattern: {
-                value: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2, 4}$/,
+                value: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
                 message: "Invalid Email !",
               },
             })}
           />
-          {errors.email && <p>{errors.email?.message as ReactNode}</p>}
+          {emailError && (
+            <ErrorText>{emailError?.message as ReactNode}</ErrorText>
+          )}
         </div>
         <div className={styles.fieldContainerClass}>
           <Label htmlFor="password" className={styles.labelClass}>
-            Password
+            Password :
           </Label>
           <Input
             type="password"
@@ -123,11 +125,13 @@ const SharedSignUpForm = ({ renderFields, setStep }) => {
               },
             })}
           />
-          {errors.password && <p>{errors.password?.message as ReactNode}</p>}
+          {passWordError && (
+            <ErrorText>{passWordError?.message as ReactNode}</ErrorText>
+          )}
         </div>
         <div className={styles.fieldContainerClass}>
           <Label htmlFor="confirm_password" className={styles.labelClass}>
-            Confirm Password
+            Confirm Password :
           </Label>
           <Input
             type="password"
@@ -141,20 +145,41 @@ const SharedSignUpForm = ({ renderFields, setStep }) => {
               validate: {
                 confirmPassword: (val) =>
                   val === getValues("password") ||
-                  "Passwords Fields don't match. Please re-check!",
+                  "Passwords Fields don't match. Please re-check !",
               },
             })}
           />
-          {errors.confirmPassword && (
-            <p>{errors.confirmPassword?.message as ReactNode}</p>
+          {confirmPasswordError && (
+            <ErrorText>{confirmPasswordError?.message as ReactNode}</ErrorText>
+          )}
+        </div>
+        <div className={styles.fieldContainerClass}>
+          <Label htmlFor="role">Role :</Label>
+          <Select
+            {...register("role", {
+              required: {
+                value: true,
+                message: "Select a role",
+              },
+            })}
+          >
+            <SelectTrigger id="role">
+              <SelectValue placeholder="Select a Role" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Roles</SelectLabel>
+                <SelectItem value="educator">Educator</SelectItem>
+                <SelectItem value="student">Student</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          {roleError && (
+            <ErrorText>{roleError?.message as ReactNode}</ErrorText>
           )}
         </div>
       </div>
-      {renderFields?.(form)}
       <DialogFooter className={styles.footerClass}>
-        <button onClick={() => setStep?.((prevStep) => prevStep - 1)}>
-          Back
-        </button>
         <button
           type="submit"
           className={styles.signUpBtnClass}
@@ -169,4 +194,4 @@ const SharedSignUpForm = ({ renderFields, setStep }) => {
   );
 };
 
-export default SharedSignUpForm;
+export default SignUpForm;
